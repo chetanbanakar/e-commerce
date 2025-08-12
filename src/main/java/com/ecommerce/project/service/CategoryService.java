@@ -10,4 +10,6 @@ public interface CategoryService {
     List<Category> getAllCategories();
 
     void createCategories(@RequestBody Category category);
+
+    String deleteCategory(Long categoryId);
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.project.exception;
 
+import com.ecommerce.project.payload.APIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,7 +18,7 @@ public class MyGlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> myMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> response = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach(err -> {
-            String fieldName = ((FieldError)err).getField();
+            String fieldName = ((FieldError) err).getField();
             String message = err.getDefaultMessage();
 
             response.put(fieldName, message);
@@ -26,14 +27,16 @@ public class MyGlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> myResourceNotFoundException(ResourceNotFoundException e){
+    public ResponseEntity<APIResponse> myResourceNotFoundException(ResourceNotFoundException e) {
         String message = e.getMessage();
-        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        APIResponse apiResponse = new APIResponse(message, false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(APIException.class)
-    public ResponseEntity<String> myAPIException(APIException e){
+    public ResponseEntity<APIResponse> myAPIException(APIException e) {
         String message = e.getMessage();
-        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        APIResponse apiResponse = new APIResponse(message, false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 }

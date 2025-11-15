@@ -11,4 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryResponse {
     private List<CategoryDTO> content;
+    private PageDetails page;
 }

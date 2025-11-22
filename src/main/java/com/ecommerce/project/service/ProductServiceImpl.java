@@ -79,18 +79,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(ProductDTO productDTO, Long productId) {
-       Product productFromDb = productRepository.findById(productId)
-               .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+        Product productFromDb = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
 
-       Product product = modelMapper.map(productDTO, Product.class);
-       productFromDb.setProductName(product.getProductName());
-       productFromDb.setDescription(product.getDescription());
-       productFromDb.setDiscount(product.getDiscount());
-       productFromDb.setPrice(product.getPrice());
-       productFromDb.setQuantity(product.getQuantity());
-       productFromDb.setSpecialPrice(product.getPrice() - (product.getDiscount() * 0.01) * product.getPrice());
+        Product product = modelMapper.map(productDTO, Product.class);
+        productFromDb.setProductName(product.getProductName());
+        productFromDb.setDescription(product.getDescription());
+        productFromDb.setDiscount(product.getDiscount());
+        productFromDb.setPrice(product.getPrice());
+        productFromDb.setQuantity(product.getQuantity());
+        productFromDb.setSpecialPrice(product.getPrice() - (product.getDiscount() * 0.01) * product.getPrice());
 
-       Product savedProduct = productRepository.save(productFromDb);
+        Product savedProduct = productRepository.save(productFromDb);
         return modelMapper.map(savedProduct, ProductDTO.class);
+    }
+
+    @Override
+    public ProductDTO deleteCategory(Long productId) {
+        Product productFromDb = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        productRepository.delete(productFromDb);
+        return modelMapper.map(productFromDb, ProductDTO.class);
     }
 }
